@@ -15,6 +15,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "whitefox.h"
+#include "keymap_german.h"
 #define _______ KC_TRNS
 #define XXXXXXX KC_NO
 
@@ -34,13 +35,13 @@ const uint16_t keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      */
     [0] = KEYMAP( \
       /*************************************************************************************************************************************************/
-        KC_ESC,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS, KC_EQL,  KC_BSLS, KC_GRV,  KC_PAUSE,\
+        KC_ESC,  DE_1,    DE_2,    DE_3,    DE_4,    DE_5,    DE_6,    DE_7,    DE_8,    DE_9,    DE_0,    DE_MINS, DE_EQL,  DE_BSLS, DE_GRV,  KC_APP,  \
       /*************************************************************************************************************************************************/
-        KC_TAB,      KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC, KC_RBRC, KC_BSPC,      KC_DEL,  \
+        KC_TAB,      DE_Q,    DE_W,    DE_E,    DE_R,    DE_T,    DE_Y,    DE_U,    DE_I,    DE_O,    DE_P,    DE_LBRC, DE_RBRC, KC_BSPC,      KC_DEL,  \
       /*************************************************************************************************************************************************/
-        KC_CAPS,         KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT, XXXXXXX, KC_ENT,   KC_PGUP, \
+        KC_FN0,          DE_A,    DE_S,    DE_D,    DE_F,    DE_G,    DE_H,    DE_J,    DE_K,    DE_L,    DE_SCLN, DE_QUOT, XXXXXXX, KC_ENT,   KC_PGUP, \
       /*************************************************************************************************************************************************/
-        KC_LSFT,    XXXXXXX, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT,       KC_UP,   KC_PGDN, \
+        KC_LSFT,    XXXXXXX, DE_Z,    DE_X,    DE_C,    DE_V,    DE_B,    DE_N,    DE_M,    DE_COMM, DE_DOT,  DE_SLSH, KC_RSFT,       KC_UP,   KC_PGDN, \
       /*************************************************************************************************************************************************/
         KC_LCTL,    KC_LGUI,    KC_LALT,                         KC_SPC,                          KC_RALT, KC_FN0,  XXXXXXX, KC_LEFT, KC_DOWN, KC_RGHT  \
       /*************************************************************************************************************************************************/
