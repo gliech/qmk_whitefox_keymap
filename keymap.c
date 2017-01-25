@@ -16,14 +16,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "whitefox.h"
 #include "keymap_german.h"
+#include "shiftlayer.h"
 
 #define _MAIN 0
 #define _RIFT 1
-#define _JUMP 2
+#define _MODS 2
+#define _STEP 3
 
 enum whitefox_keycodes {
 	RIFT = SAFE_RANGE,
-	JUMP,
+	STEP,
+	MCTL,
+	MGUI,
+	MALT,
 	RF_AT,
 	RF_HASH,
 	RF_CIRC,
@@ -45,6 +50,7 @@ enum whitefox_keycodes {
 #define RF_DQOT DE_2
 #define RF_MORE DE_LESS
 #define RF_QST  DE_SS
+#define GB_LOCK LCTL(LALT(KC_L))
 
 const uint16_t keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
@@ -54,23 +60,23 @@ const uint16_t keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |---------------------------------------------------------------|
  * |Tab  |  Q|  W|  E|  R|  T|  Y|  U|  I|  O|  P|  [|  ]|Backs|Del|
  * |---------------------------------------------------------------|
- * |Fn0   |  A|  S|  D|  F|  G|  H|  J|  K|  L|  ;|  '|Enter   |PgU|
+ * |Step  |  A|  S|  D|  F|  G|  H|  J|  K|  L|  ;|  '|Enter   |PgU|
  * |---------------------------------------------------------------|
  * |Shift   |  Z|  X|  C|  V|  B|  N|  M|  ,|  .|  /|Shift |Up |PgD|
  * |---------------------------------------------------------------|
- * |Ctrl|Gui |Alt |         Space         |Menu|Fn0 |  |Lef|Dow|Rig|
+ * |Ctrl|Gui |Alt |         Space         |Menu|Step|  |Lef|Dow|Rig|
  * `---------------------------------------------------------------'
  */
 [_MAIN] = KEYMAP(
-  KC_ESC,  DE_1,    DE_2,    DE_3,    DE_4,    DE_5,    DE_6,    DE_7,    DE_8,    DE_9,    DE_0,    DE_MINS, DE_EQL,  DE_BSLS, DE_GRV,  KC_APP,
+  KC_ESC,  DE_1,    DE_2,    DE_3,    DE_4,    DE_5,    DE_6,    DE_7,    DE_8,    DE_9,    DE_0,    DE_MINS, DE_EQL,  DE_BSLS, DE_GRV,  GB_LOCK,
 
   KC_TAB,      DE_Q,    DE_W,    DE_E,    DE_R,    DE_T,    DE_Z,    DE_U,    DE_I,    DE_O,    DE_P,    DE_LBRC, DE_RBRC, KC_BSPC,      KC_DEL,
 
-  JUMP,            DE_A,    DE_S,    DE_D,    DE_F,    DE_G,    DE_H,    DE_J,    DE_K,    DE_L,    DE_SCLN, DE_QUOT, XXXXXXX, KC_ENT,   KC_PGUP,
+  STEP,            DE_A,    DE_S,    DE_D,    DE_F,    DE_G,    DE_H,    DE_J,    DE_K,    DE_L,    DE_SCLN, DE_QUOT, XXXXXXX, KC_ENT,   KC_PGUP,
 
   RIFT,       XXXXXXX, DE_Y,    DE_X,    DE_C,    DE_V,    DE_B,    DE_N,    DE_M,    DE_COMM, DE_DOT,  DE_SLSH, RIFT,          KC_UP,   KC_PGDN,
 
-  KC_LCTL,    KC_LGUI,    KC_LALT,                         KC_SPC,                          KC_MENU, JUMP,    XXXXXXX, KC_LEFT, KC_DOWN, KC_RGHT
+  MCTL,       MGUI,       MALT,                            KC_SPC,                          KC_MENU, STEP,    XXXXXXX, KC_LEFT, KC_DOWN, KC_RGHT
 ),
 
 
@@ -100,29 +106,54 @@ const uint16_t keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 ),
 
 
-/* Jump Layer
+/* Mods Layer (will activate on pressing Ctrl, Alt and GUI keys to compensate for strange keymap)
  * ,---------------------------------------------------------------.
- * |   | F1| F2| F3| F4| F5| F6| F7| F8| F9|F10|F11|F12|   |   |RST|
+ * |   |   |  2|  3|   |   |  6|  7|  8|  9|  0|   |   |   |   |   |
  * |---------------------------------------------------------------|
- * |     |   |   |   |   |   |   |   |   |   |   |   |   |     |INS|
+ * |     |   |   |   |   |   |   |   |   |   |   |   |   |     |   |
  * |---------------------------------------------------------------|
- * |      |   |   |   |   |   |   |   |   |   |   |   |        |HOM|
+ * |      |   |   |   |   |   |   |   |   |   |   |   |        |   |
+ * |---------------------------------------------------------------|
+ * |        |   |   |   |   |   |   |   |   |   |   |      |   |   |
+ * |---------------------------------------------------------------|
+ * |    |    |    |                       |    |    |  |   |   |   |
+ * `---------------------------------------------------------------'
+ */
+[_MODS] = KEYMAP(
+  _______, _______, DE_2,    DE_3,    _______, _______, DE_6,    DE_7,    DE_8,    DE_9,    DE_0,    _______, _______, _______, _______, XXXXXXX,
+
+  _______,     _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,      _______,
+
+  _______,         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, XXXXXXX, _______,  _______,
+
+  _______,    XXXXXXX, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,       _______, _______,
+
+  _______,    _______,    _______,                         _______,                         _______, _______, XXXXXXX, _______, _______, _______
+),
+
+/* Step Layer
+ * ,---------------------------------------------------------------.
+ * |RST| F1| F2| F3| F4| F5| F6| F7| F8| F9|F10|F11|F12|SCR|SCL|BRK|
+ * |---------------------------------------------------------------|
+ * |     |   |   |  €|   |   |   |  ü|   |  ö|   |   |   |     |INS|
+ * |---------------------------------------------------------------|
+ * |      |  ä|  ß|   |   |   |   |   |   |   |   |   |        |HOM|
  * |---------------------------------------------------------------|
  * |        |   |   |   |   |   |   |   |   |   |   |      |   |END|
  * |---------------------------------------------------------------|
  * |    |    |    |                       |    |    |  |   |   |   |
  * `---------------------------------------------------------------'
  */
-[_JUMP] = KEYMAP(
-  _______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  _______, _______, RESET,
+[_STEP] = KEYMAP(
+  RESET,   KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_PSCR, KC_SLCK, KC_PAUS,
 
-  _______,     _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,      KC_INS,
+  XXXXXXX,     XXXXXXX, XXXXXXX, DE_EURO, XXXXXXX, XXXXXXX, XXXXXXX, DE_UE,   XXXXXXX, DE_OE,   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,      KC_INS,
 
-  _______,         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, XXXXXXX, _______,  KC_HOME,
+  _______,         DE_AE,   DE_SS,   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,  KC_HOME,
 
-  _______,    XXXXXXX, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,       _______, KC_END,
+  _______,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,       XXXXXXX, KC_END,
 
-  _______,    _______,    _______,                         _______,                         _______, _______, XXXXXXX, _______, _______, _______
+  _______,    _______,    _______,                         XXXXXXX,                         XXXXXXX, _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX
 ),
 
 
@@ -133,68 +164,113 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 	switch (keycode) {
 		case RIFT:
 			if (record->event.pressed) {
-				layer_on(_RIFT);
-				register_mods(MOD_BIT(KC_LSFT));
+				shiftlayer_on(_RIFT, MOD_BIT(KC_LSFT));
 			} else {
-				layer_off(_RIFT);
-				unregister_mods(MOD_BIT(DE_ALGR));
-			unregister_mods(MOD_BIT(KC_LSFT));
+				shiftlayer_off(_RIFT, MOD_BIT(KC_LSFT));
 			}
 			return false;
 			break;
-		case JUMP:
+		case STEP:
 			if (record->event.pressed) {
-				layer_on(_JUMP);
+				layer_on(_STEP);
 			} else {
-				layer_off(_JUMP);
+				layer_off(_STEP);
+			}
+			return false;
+			break;
+		case MCTL:
+			if (record->event.pressed) {
+				modlayer_on(_MODS, MOD_BIT(KC_LCTL));
+			} else {
+				modlayer_off(_MODS, MOD_BIT(KC_LCTL), (MOD_BIT(KC_LCTL)|MOD_BIT(KC_LGUI)|MOD_BIT(KC_LALT)));
+			}
+			return false;
+			break;
+		case MGUI:
+			if (record->event.pressed) {
+				modlayer_on(_MODS, MOD_BIT(KC_LGUI));
+			} else {
+				modlayer_off(_MODS, MOD_BIT(KC_LGUI), (MOD_BIT(KC_LCTL)|MOD_BIT(KC_LGUI)|MOD_BIT(KC_LALT)));
+			}
+			return false;
+			break;
+		case MALT:
+			if (record->event.pressed) {
+				modlayer_on(_MODS, MOD_BIT(KC_LALT));
+			} else {
+				modlayer_off(_MODS, MOD_BIT(KC_LALT), (MOD_BIT(KC_LCTL)|MOD_BIT(KC_LGUI)|MOD_BIT(KC_LALT)));
+			}
+			return false;
+			break;
+		case RF_AT:
+			if (record->event.pressed) {
+				register_shiftlayer_code(DE_Q, MOD_BIT(KC_LSFT), MOD_BIT(DE_ALGR));
+			} else {
+				unregister_shiftlayer_code(DE_Q, _RIFT, MOD_BIT(KC_LSFT), MOD_BIT(DE_ALGR));
 			}
 			return false;
 			break;
 		case RF_HASH:
 			if (record->event.pressed) {
+				register_shiftlayer_code(DE_HASH, MOD_BIT(KC_LSFT), 0);
 			} else {
+				unregister_shiftlayer_code(DE_HASH, _RIFT, MOD_BIT(KC_LSFT), 0);
 			}
 			return false;
 			break;
 		case RF_CIRC:
 			if (record->event.pressed) {
+				register_shiftlayer_code(DE_CIRC, MOD_BIT(KC_LSFT), 0);
 			} else {
+				unregister_shiftlayer_code(DE_CIRC, _RIFT, MOD_BIT(KC_LSFT), 0);
 			}
 			return false;
 			break;
 		case RF_PLUS:
 			if (record->event.pressed) {
+				register_shiftlayer_code(DE_PLUS, MOD_BIT(KC_LSFT), 0);
 			} else {
+				unregister_shiftlayer_code(DE_PLUS, _RIFT, MOD_BIT(KC_LSFT), 0);
 			}
 			return false;
 			break;
 		case RF_PIPE:
 			if (record->event.pressed) {
+				register_shiftlayer_code(DE_LESS, MOD_BIT(KC_LSFT), MOD_BIT(DE_ALGR));
 			} else {
+				unregister_shiftlayer_code(DE_LESS, _RIFT, MOD_BIT(KC_LSFT), MOD_BIT(DE_ALGR));
 			}
 			return false;
 			break;
 		case RF_TILD:
 			if (record->event.pressed) {
+				register_shiftlayer_code(DE_PLUS, MOD_BIT(KC_LSFT), MOD_BIT(DE_ALGR));
 			} else {
+				unregister_shiftlayer_code(DE_PLUS, _RIFT, MOD_BIT(KC_LSFT), MOD_BIT(DE_ALGR));
 			}
 			return false;
 			break;
 		case RF_LCBR:
 			if (record->event.pressed) {
+				register_shiftlayer_code(DE_7, MOD_BIT(KC_LSFT), MOD_BIT(DE_ALGR));
 			} else {
+				unregister_shiftlayer_code(DE_7, _RIFT, MOD_BIT(KC_LSFT), MOD_BIT(DE_ALGR));
 			}
 			return false;
 			break;
 		case RF_RCBR:
 			if (record->event.pressed) {
+				register_shiftlayer_code(DE_0, MOD_BIT(KC_LSFT), MOD_BIT(DE_ALGR));
 			} else {
+				unregister_shiftlayer_code(DE_0, _RIFT, MOD_BIT(KC_LSFT), MOD_BIT(DE_ALGR));
 			}
 			return false;
 			break;
 		case RF_LESS:
 			if (record->event.pressed) {
+				register_shiftlayer_code(DE_LESS, MOD_BIT(KC_LSFT), 0);
 			} else {
+				unregister_shiftlayer_code(DE_LESS, _RIFT, MOD_BIT(KC_LSFT), 0);
 			}
 			return false;
 			break;
