@@ -18,14 +18,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "keymap_german.h"
 #include "shiftlayer.h"
 
+static uint16_t keytimer
+
 #define _MAIN 0
 #define _RIFT 1
 #define _MODS 2
 #define _STEP 3
+#define _JUMP 4
+#define _WAKE 5
 
 enum whitefox_keycodes {
 	RIFT = SAFE_RANGE,
 	STEP,
+	JUMP,
 	MCTL,
 	MGUI,
 	MALT,
@@ -38,6 +43,7 @@ enum whitefox_keycodes {
 	RF_LCBR,
 	RF_RCBR,
 	RF_LESS,
+	GB_PWR,
 };
 
 #define _______ KC_TRNS
@@ -64,7 +70,7 @@ const uint16_t keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |---------------------------------------------------------------|
  * |Shift   |  Z|  X|  C|  V|  B|  N|  M|  ,|  .|  /|Shift |Up |PgD|
  * |---------------------------------------------------------------|
- * |Ctrl|Gui |Alt |         Space         |Menu|Step|  |Lef|Dow|Rig|
+ * |Ctrl|Gui |Alt |         Space         |Menu|Jump|  |Lef|Dow|Rig|
  * `---------------------------------------------------------------'
  */
 [_MAIN] = KEYMAP(
@@ -76,7 +82,7 @@ const uint16_t keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   RIFT,       XXXXXXX, DE_Y,    DE_X,    DE_C,    DE_V,    DE_B,    DE_N,    DE_M,    DE_COMM, DE_DOT,  DE_SLSH, RIFT,          KC_UP,   KC_PGDN,
 
-  MCTL,       MGUI,       MALT,                            KC_SPC,                          KC_MENU, STEP,    XXXXXXX, KC_LEFT, KC_DOWN, KC_RGHT
+  MCTL,       MGUI,       MALT,                            KC_SPC,                          KC_MENU, JUMP,    XXXXXXX, KC_LEFT, KC_DOWN, KC_RGHT
 ),
 
 
@@ -139,23 +145,47 @@ const uint16_t keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |---------------------------------------------------------------|
  * |      |  ä|  ß|   |   |   |   |   |   |   |   |   |        |HOM|
  * |---------------------------------------------------------------|
- * |        |   |   |   |   |   |   |   |   |   |   |      |   |END|
+ * |        |   |   |   |   |   |   |  µ|   |   |   |      |   |END|
  * |---------------------------------------------------------------|
  * |    |    |    |                       |    |    |  |   |   |   |
  * `---------------------------------------------------------------'
  */
 [_STEP] = KEYMAP(
-  RESET,   KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_PSCR, KC_SLCK, KC_PAUS,
+  XXXXXXX, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_PSCR, KC_SLCK, KC_PAUS,
 
   XXXXXXX,     XXXXXXX, XXXXXXX, DE_EURO, XXXXXXX, XXXXXXX, XXXXXXX, DE_UE,   XXXXXXX, DE_OE,   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,      KC_INS,
 
   _______,         DE_AE,   DE_SS,   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,  KC_HOME,
 
-  _______,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,       XXXXXXX, KC_END,
+  _______,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, DE_MU,   XXXXXXX, XXXXXXX, XXXXXXX, _______,       XXXXXXX, KC_END,
 
   _______,    _______,    _______,                         XXXXXXX,                         XXXXXXX, _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX
 ),
 
+/* Jump Layer
+ * ,---------------------------------------------------------------.
+ * |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |
+ * |---------------------------------------------------------------|
+ * |     |   |   |   |   |   |   |   |   |   |   |   |   |     |   |
+ * |---------------------------------------------------------------|
+ * |      |   |   |   |   |   |   |   |   |   |   |   |        |   |
+ * |---------------------------------------------------------------|
+ * |        |   |   |   |   |   |   |   |   |   |   |      |   |   |
+ * |---------------------------------------------------------------|
+ * |    |    |    |                       |    |    |  |   |   |   |
+ * `---------------------------------------------------------------'
+ */
+[_JUMP] = KEYMAP(
+  RESET,   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+
+  XXXXXXX,     XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,      KC_BTN3,
+
+  KC_CAPS,         XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_BTN2,  KC_WH_U,
+
+  XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_BTN1,       KC_MS_U, KC_WH_D,
+
+  XXXXXXX,    XXXXXXX,    XXXXXXX,                         XXXXXXX,                         XXXXXXX, _______, XXXXXXX, KC_MS_L, KC_MS_D, KC_MS_R
+),
 
 };
 
@@ -175,6 +205,15 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 				layer_on(_STEP);
 			} else {
 				layer_off(_STEP);
+			}
+			return false;
+			break;
+		case JUMP:
+			if (record->event.pressed) {
+				clear_mods();
+				layer_on(_JUMP);
+			} else {
+				layer_off(_JUMP);
 			}
 			return false;
 			break;
