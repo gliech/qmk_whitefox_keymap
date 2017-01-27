@@ -236,10 +236,17 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 			break;
 		case JUMP:
 			if (record->event.pressed) {
-				clear_mods();
-				layer_on(_JUMP);
+				if (IS_LAYER_ON(_JUMP)) {
+					layer_off(_JUMP);
+				} else { 
+					tap_timer = timer_read();
+					clear_mods();
+					layer_on(_JUMP);
+				}
 			} else {
-				layer_off(_JUMP);
+				if ( IS_LAYER_ON(_JUMP) && timer_elapsed(tap_timer) > 150 ) {
+					layer_off(_JUMP);
+				}
 			}
 			return false;
 			break;
