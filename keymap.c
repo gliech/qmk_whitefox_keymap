@@ -18,7 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "keymap_german.h"
 #include "shiftlayer.h"
 
-static uint16_t keytimer
+static uint16_t tap_timer;
 
 #define _MAIN 0
 #define _RIFT 1
@@ -44,6 +44,7 @@ enum whitefox_keycodes {
 	RF_RCBR,
 	RF_LESS,
 	GB_PWR,
+	GB_WAKE,
 };
 
 #define _______ KC_TRNS
@@ -62,7 +63,7 @@ const uint16_t keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /* Main Layer
  * ,---------------------------------------------------------------.
- * |Esc|  1|  2|  3|  4|  5|  6|  7|  8|  9|  0|  -|  =|  \|  `|Ins|
+ * |Esc|  1|  2|  3|  4|  5|  6|  7|  8|  9|  0|  -|  =|  \|  `|Lck|
  * |---------------------------------------------------------------|
  * |Tab  |  Q|  W|  E|  R|  T|  Y|  U|  I|  O|  P|  [|  ]|Backs|Del|
  * |---------------------------------------------------------------|
@@ -151,7 +152,7 @@ const uint16_t keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `---------------------------------------------------------------'
  */
 [_STEP] = KEYMAP(
-  XXXXXXX, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_PSCR, KC_SLCK, KC_PAUS,
+  XXXXXXX, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_PSCR, KC_SLCK, XXXXXXX,
 
   XXXXXXX,     XXXXXXX, XXXXXXX, DE_EURO, XXXXXXX, XXXXXXX, XXXXXXX, DE_UE,   XXXXXXX, DE_OE,   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,      KC_INS,
 
@@ -176,7 +177,7 @@ const uint16_t keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `---------------------------------------------------------------'
  */
 [_JUMP] = KEYMAP(
-  RESET,   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+  RESET,   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, GB_PWR,
 
   XXXXXXX,     XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,      KC_BTN3,
 
@@ -185,6 +186,31 @@ const uint16_t keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_BTN1,       KC_MS_U, KC_WH_D,
 
   XXXXXXX,    XXXXXXX,    XXXXXXX,                         XXXXXXX,                         XXXXXXX, _______, XXXXXXX, KC_MS_L, KC_MS_D, KC_MS_R
+),
+
+/* Wake Layer
+ * ,---------------------------------------------------------------.
+ * |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |
+ * |---------------------------------------------------------------|
+ * |     |   |   |   |   |   |   |   |   |   |   |   |   |     |   |
+ * |---------------------------------------------------------------|
+ * |      |   |   |   |   |   |   |   |   |   |   |   |        |   |
+ * |---------------------------------------------------------------|
+ * |        |   |   |   |   |   |   |   |   |   |   |      |   |   |
+ * |---------------------------------------------------------------|
+ * |    |    |    |                       |    |    |  |   |   |   |
+ * `---------------------------------------------------------------'
+ */
+[_WAKE] = KEYMAP(
+  GB_WAKE, GB_WAKE, GB_WAKE, GB_WAKE, GB_WAKE, GB_WAKE, GB_WAKE, GB_WAKE, GB_WAKE, GB_WAKE, GB_WAKE, GB_WAKE, GB_WAKE, GB_WAKE, GB_WAKE, GB_WAKE,
+
+  GB_WAKE,     GB_WAKE, GB_WAKE, GB_WAKE, GB_WAKE, GB_WAKE, GB_WAKE, GB_WAKE, GB_WAKE, GB_WAKE, GB_WAKE, GB_WAKE, GB_WAKE, GB_WAKE,      GB_WAKE,
+
+  GB_WAKE,         GB_WAKE, GB_WAKE, GB_WAKE, GB_WAKE, GB_WAKE, GB_WAKE, GB_WAKE, GB_WAKE, GB_WAKE, GB_WAKE, GB_WAKE, GB_WAKE, GB_WAKE,  GB_WAKE,
+
+  GB_WAKE,    GB_WAKE, GB_WAKE, GB_WAKE, GB_WAKE, GB_WAKE, GB_WAKE, GB_WAKE, GB_WAKE, GB_WAKE, GB_WAKE, GB_WAKE, GB_WAKE,       GB_WAKE, GB_WAKE,
+
+  GB_WAKE,    GB_WAKE,    GB_WAKE,                         GB_WAKE,                         GB_WAKE, GB_WAKE, GB_WAKE, GB_WAKE, GB_WAKE, GB_WAKE
 ),
 
 };
@@ -310,6 +336,29 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 				register_shiftlayer_code(DE_LESS, MOD_BIT(KC_LSFT), 0);
 			} else {
 				unregister_shiftlayer_code(DE_LESS, _RIFT, MOD_BIT(KC_LSFT), 0);
+			}
+			return false;
+			break;
+		case GB_PWR:
+			if (record->event.pressed) {
+				tap_timer = timer_read();
+			} else {
+				if (timer_elapsed(tap_timer) < 2000) {
+					layer_on(_WAKE);
+					register_code(KC_SLEP);
+					unregister_code(KC_SLEP);
+				} else {
+					register_code(KC_PWR);
+					unregister_code(KC_PWR);
+				}
+			}
+			return false;
+			break;
+		case GB_WAKE:
+			if (record->event.pressed) {
+				register_code(KC_WAKE);
+				unregister_code(KC_WAKE);
+				layer_off(_WAKE);
 			}
 			return false;
 			break;
