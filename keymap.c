@@ -83,7 +83,7 @@ const uint16_t keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   RIFT,       XXXXXXX, DE_Y,    DE_X,    DE_C,    DE_V,    DE_B,    DE_N,    DE_M,    DE_COMM, DE_DOT,  DE_SLSH, RIFT,          KC_UP,   KC_PGDN,
 
-  MCTL,       MGUI,       MALT,                            KC_SPC,                          KC_MENU, JUMP,    XXXXXXX, KC_LEFT, KC_DOWN, KC_RGHT
+  MCTL,       MGUI,       MALT,                            KC_SPC,                          KC_APP,  JUMP,    XXXXXXX, KC_LEFT, KC_DOWN, KC_RGHT
 ),
 
 
@@ -152,7 +152,7 @@ const uint16_t keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `---------------------------------------------------------------'
  */
 [_STEP] = KEYMAP(
-  XXXXXXX, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_PSCR, KC_SLCK, XXXXXXX,
+  DE_RING, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_PSCR, KC_SLCK, KC_PAUS,
 
   XXXXXXX,     XXXXXXX, XXXXXXX, DE_EURO, XXXXXXX, XXXXXXX, XXXXXXX, DE_UE,   XXXXXXX, DE_OE,   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,      KC_INS,
 
