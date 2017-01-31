@@ -212,7 +212,7 @@ const uint16_t keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,       XXXXXXX, XXXXXXX,
 
-  XXXXXXX,    XXXXXXX,    XXXXXXX,                         XXXXXXX,                         XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+  XXXXXXX,    XXXXXXX,    XXXXXXX,                         XXXXXXX,                         XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX
 ),
 
 /* Wake Layer
