@@ -48,6 +48,15 @@ enum whitefox_keycodes {
 	RF_LESS,
 	GB_PWR,
 	GB_WAKE,
+	GB_RBIN,
+	GB_RDEC,
+	GB_RHEX,
+	GB_BIBY,
+	GB_DEBY,
+	GB_HEBY,
+	GB_RB64,
+	GB_COIN,
+	GB_DICE,
 };
 
 #define _______ KC_TRNS
@@ -193,7 +202,7 @@ const uint16_t keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /* Jump Layer
  * ,---------------------------------------------------------------.
- * |Rst|   |   |   |   |   |   |   |   |   |   |   |   |   |   |Pwr|
+ * |Rst|   |  random keys  | rand byte | d2| d6|   |   |   |   |Pwr|
  * |---------------------------------------------------------------|
  * |     |   |   |   |   |   |   |   |   |   |   |   |   |     |   |
  * |---------------------------------------------------------------|
@@ -205,7 +214,7 @@ const uint16_t keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `---------------------------------------------------------------'
  */
 [_JUMP] = KEYMAP(
-  RESET,   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, GB_PWR,
+  RESET,   GB_RBIN, GB_RDEC, GB_RHEX, GB_RB64, GB_BIBY, GB_DEBY, GB_HEBY, GB_COIN, GB_DICE, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, GB_PWR,
 
   XXXXXXX,     XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,      XXXXXXX,
 
@@ -402,6 +411,60 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 				register_code(KC_WAKE);
 				unregister_code(KC_WAKE);
 				layer_off(_WAKE);
+			}
+			return false;
+			break;
+		case GB_RBIN:
+			if (record->event.pressed) {
+				tap_random_binary();
+			}
+			return false;
+			break;
+		case GB_RDEC:
+			if (record->event.pressed) {
+				tap_random_decimal();
+			}
+			return false;
+			break;
+		case GB_RHEX:
+			if (record->event.pressed) {
+				tap_random_hexadecimal();
+			}
+			return false;
+			break;
+		case GB_RB64:
+			if (record->event.pressed) {
+				tap_random_german_base64();
+			}
+			return false;
+			break;
+		case GB_BIBY:
+			if (record->event.pressed) {
+				tap_random_binary_byte();
+			}
+			return false;
+			break;
+		case GB_DEBY:
+			if (record->event.pressed) {
+				tap_random_decimal_byte();
+			}
+			return false;
+			break;
+		case GB_HEBY:
+			if (record->event.pressed) {
+				tap_random_hexadecimal_byte();
+			}
+			return false;
+			break;
+		case GB_COIN:
+			if (record->event.pressed) {
+				tap_random_coinflip();
+			}
+			return false;
+			break;
+		case GB_DICE:
+			if (record->event.pressed) {
+				tap_random_dice6();
 			}
 			return false;
 			break;
