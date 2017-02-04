@@ -46,6 +46,7 @@ enum whitefox_keycodes {
 	RF_LCBR,
 	RF_RCBR,
 	RF_LESS,
+	RF_MORE,
 	GB_PWR,
 	GB_WAKE,
 	GB_RBIN,
@@ -67,7 +68,6 @@ enum whitefox_keycodes {
 #define RF_RPRN DE_9
 #define RF_COLN DE_DOT
 #define RF_DQOT DE_2
-#define RF_MORE DE_LESS
 #define RF_QST  DE_SS
 #define GB_LOCK LCTL(LALT(KC_L))
 
@@ -97,7 +97,6 @@ const uint16_t keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   MCTL,       MGUI,       MALT,                            KC_SPC,                          KC_APP,  MAUS,    XXXXXXX, KC_LEFT, KC_DOWN, KC_RGHT
 ),
-
 
 /* Rift Layer
  * ,---------------------------------------------------------------.
@@ -152,15 +151,15 @@ const uint16_t keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /* Step Layer
  * ,---------------------------------------------------------------.
- * |  °| F1| F2| F3| F4| F5| F6| F7| F8| F9|F10|F11|F12|SCR|SCL|BRK|
+ * |  °| F1| F2| F3| F4| F5| F6| F7| F8| F9|F10|F11|F12|Scr|Scl|Brk|
  * |---------------------------------------------------------------|
- * |     |   |   |  €|   |   |   |  ü|   |  ö|  §|   |   |     |INS|
+ * |     |   |   |  €|   |   |   |  ü|   |  ö|  §|   |   |     |Ins|
  * |---------------------------------------------------------------|
- * | ^^^^ |  ä|  ß|   |   |   |   |   |   |   |   |   |        |HOM|
+ * | ^^^^ |  ä|  ß|   |   |   |   |   |   |   |   |   |        |Hom|
  * |---------------------------------------------------------------|
- * |        |  ¹|  ²|  ³|   |   |   |  µ|   |   |   |      |   |END|
+ * |        |  ¹|  ²|  ³|   |   |   |  µ|<<<|>>>|Stp|      |Vu+|End|
  * |---------------------------------------------------------------|
- * |    |    |    |                       |    |    |  |   |   |   |
+ * |    |    |    |       Play/Pause      |Vol0|    |  |Prv|Vu-|Nxt|
  * `---------------------------------------------------------------'
  */
 [_STEP] = KEYMAP(
@@ -170,9 +169,9 @@ const uint16_t keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   _______,         DE_AE,   DE_SS,   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,  KC_HOME,
 
-  _______,    DE_SQ1,  DE_SQ2,  DE_SQ3,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, DE_MU,   XXXXXXX, XXXXXXX, XXXXXXX, _______,       XXXXXXX, KC_END,
+  _______,    XXXXXXX, DE_SQ1,  DE_SQ2,  DE_SQ3,  XXXXXXX, XXXXXXX, XXXXXXX, DE_MU,   KC_MRWD, KC_MFFD, KC_MSTP, _______,       KC_VOLU, KC_END,
 
-  _______,    _______,    _______,                         XXXXXXX,                         XXXXXXX, _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX
+  _______,    _______,    _______,                         KC_MPLY,                         KC_MUTE, _______, XXXXXXX, KC_MPRV, KC_VOLD, KC_MNXT
 ),
 
 /* Mouse Layer
@@ -280,7 +279,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 					layer_on(_MAUS);
 				}
 			} else {
-				if ( IS_LAYER_ON(_MAUS) && timer_elapsed(tap_timer) > 150 ) {
+				if ( IS_LAYER_ON(_MAUS) && timer_elapsed(tap_timer) > 180 ) {
 					layer_off(_MAUS);
 				}
 			}
@@ -385,9 +384,26 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 			break;
 		case RF_LESS:
 			if (record->event.pressed) {
-				register_shiftlayer_code(DE_LESS, MOD_BIT(KC_LSFT), 0);
+				del_key(DE_LESS);
+				unregister_mods(MOD_BIT(KC_LSFT));
+				register_code(DE_LESS);
 			} else {
-				unregister_shiftlayer_code(DE_LESS, _RIFT, MOD_BIT(KC_LSFT), 0);
+				if ( ( ~get_mods() & MOD_BIT(KC_LSFT) ) && IS_LAYER_ON(_RIFT) ) {
+					unregister_code(DE_LESS);
+					register_mods(MOD_BIT(KC_LSFT));
+				}
+			}
+			return false;
+			break;
+		case RF_MORE:
+			if (record->event.pressed) {
+				if ( ~get_mods() & MOD_BIT(KC_LSFT) ) {
+					unregister_code(DE_LESS);
+					register_mods(MOD_BIT(KC_LSFT));
+				}
+				register_code(DE_LESS);
+			} else {
+				unregister_code(DE_LESS);
 			}
 			return false;
 			break;
