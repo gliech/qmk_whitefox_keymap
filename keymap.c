@@ -24,10 +24,11 @@ static uint16_t tap_timer;
 #define _MAIN 0
 #define _RIFT 1
 #define _MODS 2
-#define _MAUS 3
-#define _STEP 4
-#define _JUMP 5
-#define _WAKE 6
+#define _ORIG 3
+#define _MAUS 4
+#define _STEP 5
+#define _JUMP 6
+#define _WAKE 7
 
 enum whitefox_keycodes {
 	RIFT = SAFE_RANGE,
@@ -58,6 +59,7 @@ enum whitefox_keycodes {
 	GB_RB64,
 	GB_COIN,
 	GB_DICE,
+	GB_DEUS,
 };
 
 #define _______ KC_TRNS
@@ -149,6 +151,31 @@ const uint16_t keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   _______,    _______,    _______,                         _______,                         _______, _______, XXXXXXX, _______, _______, _______
 ),
 
+/* Original (US QWERTY) Layer
+ * ,---------------------------------------------------------------.
+ * |Esc|  1|  2|  3|  4|  5|  6|  7|  8|  9|  0|  -|  =|  \|  `|Lck|
+ * |---------------------------------------------------------------|
+ * |Tab  |  Q|  W|  E|  R|  T|  Y|  U|  I|  O|  P|  [|  ]|Backs|Del|
+ * |---------------------------------------------------------------|
+ * |Step  |  A|  S|  D|  F|  G|  H|  J|  K|  L|  ;|  '|Enter   |PgU|
+ * |---------------------------------------------------------------|
+ * |Shift   |  Z|  X|  C|  V|  B|  N|  M|  ,|  .|  /|Jump  |Up |PgD|
+ * |---------------------------------------------------------------|
+ * |Ctrl|Gui |Alt |         Space         |Menu|Maus|  |Lef|Dow|Rig|
+ * `---------------------------------------------------------------'
+ */
+[_ORIG] = KEYMAP(
+  KC_ESC,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS, KC_EQL,  KC_BSLS, KC_GRV,  GB_LOCK,
+
+  KC_TAB,      KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC, KC_RBRC, KC_BSPC,      KC_DEL,
+
+  STEP,            KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT, XXXXXXX, KC_ENT,   KC_PGUP,
+
+  KC_LSFT,    XXXXXXX, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, JUMP,          KC_UP,   KC_PGDN,
+
+  KC_LCTL,    KC_LGUI,    KC_LALT,                         KC_SPC,                          KC_APP,  MAUS,    XXXXXXX, KC_LEFT, KC_DOWN, KC_RGHT
+),
+
 /* Mouse Layer
  * ,---------------------------------------------------------------.
  * |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |
@@ -215,7 +242,7 @@ const uint16_t keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_JUMP] = KEYMAP(
   RESET,   GB_RBIN, GB_RDEC, GB_RHEX, GB_RB64, GB_BIBY, GB_DEBY, GB_HEBY, GB_COIN, GB_DICE, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, GB_PWR,
 
-  XXXXXXX,     XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,      XXXXXXX,
+  XXXXXXX,     GB_DEUS, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,      XXXXXXX,
 
   KC_CAPS,         XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,  XXXXXXX,
 
@@ -481,6 +508,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 		case GB_DICE:
 			if (record->event.pressed) {
 				tap_random_dice6();
+			}
+			return false;
+			break;
+		case GB_DEUS:
+			if (record->event.pressed) {
+				default_layer_xor( (1UL<<_MAIN) | (1UL<<_ORIG) );
+				eeconfig_update_default_layer( eeconfig_read_default_layer() ^ ( (1UL<<_MAIN) | (1UL<<_ORIG) ) );
 			}
 			return false;
 			break;
