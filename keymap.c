@@ -127,8 +127,10 @@ const uint16_t keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 
 /* Mods Layer (will activate on pressing Ctrl, Alt and GUI keys to compensate for strange keymap)
+ * The + isn't nescessary really, but for some reason Windows does not recognise the normal configuration and since ctrl+ is a combination I use
+ * regularly I have quickly changed it. But I don't know if it is a good idea.
  * ,---------------------------------------------------------------.
- * |   |   |  2|  3|   |   |  6|  7|  8|  9|  0|   |   |   |   |   |
+ * |   |   |  2|  3|   |   |  6|  7|  8|  9|  0|   | + |   |   |   |
  * |---------------------------------------------------------------|
  * |     |   |   |   |   |   |   |   |   |   |   |   |   |     |   |
  * |---------------------------------------------------------------|
@@ -140,7 +142,7 @@ const uint16_t keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `---------------------------------------------------------------'
  */
 [_MODS] = KEYMAP(
-  _______, _______, DE_2,    DE_3,    _______, _______, DE_6,    DE_7,    DE_8,    DE_9,    DE_0,    _______, _______, _______, _______, XXXXXXX,
+  _______, _______, DE_2,    DE_3,    _______, _______, DE_6,    DE_7,    DE_8,    DE_9,    DE_0,    _______, DE_PLUS, _______, _______, XXXXXXX,
 
   _______,     _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,      _______,
 
