@@ -31,35 +31,35 @@ static uint16_t tap_timer;
 #define _WAKE 7
 
 enum whitefox_keycodes {
-	RIFT = SAFE_RANGE,
-	STEP,
-	MAUS,
-	JUMP,
-	MCTL,
-	MGUI,
-	MALT,
-	RF_AT,
-	RF_HASH,
-	RF_CIRC,
-	RF_PLUS,
-	RF_PIPE,
-	RF_TILD,
-	RF_LCBR,
-	RF_RCBR,
-	RF_LESS,
-	RF_MORE,
-	GB_PWR,
-	GB_WAKE,
-	GB_RBIN,
-	GB_RDEC,
-	GB_RHEX,
-	GB_BIBY,
-	GB_DEBY,
-	GB_HEBY,
-	GB_RB64,
-	GB_COIN,
-	GB_DICE,
-	GB_DEUS,
+    RIFT = SAFE_RANGE,
+    STEP,
+    MAUS,
+    JUMP,
+    MCTL,
+    MGUI,
+    MALT,
+    RF_AT,
+    RF_HASH,
+    RF_CIRC,
+    RF_PLUS,
+    RF_PIPE,
+    RF_TILD,
+    RF_LCBR,
+    RF_RCBR,
+    RF_LESS,
+    RF_MORE,
+    GB_PWR,
+    GB_WAKE,
+    GB_RBIN,
+    GB_RDEC,
+    GB_RHEX,
+    GB_BIBY,
+    GB_DEBY,
+    GB_HEBY,
+    GB_RB64,
+    GB_COIN,
+    GB_DICE,
+    GB_DEUS,
 };
 
 #define _______ KC_TRNS
@@ -281,246 +281,245 @@ const uint16_t keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-	
-	switch (keycode) {
-		case RIFT:
-			if (record->event.pressed) {
-				shiftlayer_on(_RIFT, MOD_BIT(KC_LSFT));
-			} else {
-				shiftlayer_off(_RIFT, MOD_BIT(KC_LSFT));
-			}
-			return false;
-			break;
-		case STEP:
-			if (record->event.pressed) {
-				layer_on(_STEP);
-			} else {
-				layer_off(_STEP);
-			}
-			return false;
-			break;
-		case MAUS:
-			if (record->event.pressed) {
-				if (IS_LAYER_ON(_MAUS)) {
-					layer_off(_MAUS);
-				} else { 
-					tap_timer = timer_read();
-					layer_on(_MAUS);
-				}
-			} else {
-				if ( IS_LAYER_ON(_MAUS) && timer_elapsed(tap_timer) > 180 ) {
-					layer_off(_MAUS);
-				}
-			}
-			return false;
-			break;
-		case JUMP:
-			if (record->event.pressed) {
-				clear_mods();
-				layer_on(_JUMP);
-			} else {
-				layer_off(_JUMP);
-			}
-			return false;
-			break;
-		case MCTL:
-			if (record->event.pressed) {
-				modlayer_on(_MODS, MOD_BIT(KC_LCTL));
-			} else {
-				modlayer_off(_MODS, MOD_BIT(KC_LCTL), (MOD_BIT(KC_LCTL)|MOD_BIT(KC_LGUI)|MOD_BIT(KC_LALT)));
-			}
-			return false;
-			break;
-		case MGUI:
-			if (record->event.pressed) {
-				modlayer_on(_MODS, MOD_BIT(KC_LGUI));
-			} else {
-				modlayer_off(_MODS, MOD_BIT(KC_LGUI), (MOD_BIT(KC_LCTL)|MOD_BIT(KC_LGUI)|MOD_BIT(KC_LALT)));
-			}
-			return false;
-			break;
-		case MALT:
-			if (record->event.pressed) {
-				modlayer_on(_MODS, MOD_BIT(KC_LALT));
-			} else {
-				modlayer_off(_MODS, MOD_BIT(KC_LALT), (MOD_BIT(KC_LCTL)|MOD_BIT(KC_LGUI)|MOD_BIT(KC_LALT)));
-			}
-			return false;
-			break;
-		case RF_AT:
-			if (record->event.pressed) {
-				register_shiftlayer_code(DE_Q, MOD_BIT(KC_LSFT), MOD_BIT(DE_ALGR));
-			} else {
-				unregister_shiftlayer_code(DE_Q, _RIFT, MOD_BIT(KC_LSFT), MOD_BIT(DE_ALGR));
-			}
-			return false;
-			break;
-		case RF_HASH:
-			if (record->event.pressed) {
-				register_shiftlayer_code(DE_HASH, MOD_BIT(KC_LSFT), 0);
-			} else {
-				unregister_shiftlayer_code(DE_HASH, _RIFT, MOD_BIT(KC_LSFT), 0);
-			}
-			return false;
-			break;
-		case RF_CIRC:
-			if (record->event.pressed) {
-				register_shiftlayer_code(DE_CIRC, MOD_BIT(KC_LSFT), 0);
-			} else {
-				unregister_shiftlayer_code(DE_CIRC, _RIFT, MOD_BIT(KC_LSFT), 0);
-			}
-			return false;
-			break;
-		case RF_PLUS:
-			if (record->event.pressed) {
-				register_shiftlayer_code(DE_PLUS, MOD_BIT(KC_LSFT), 0);
-			} else {
-				unregister_shiftlayer_code(DE_PLUS, _RIFT, MOD_BIT(KC_LSFT), 0);
-			}
-			return false;
-			break;
-		case RF_PIPE:
-			if (record->event.pressed) {
-				register_shiftlayer_code(DE_LESS, MOD_BIT(KC_LSFT), MOD_BIT(DE_ALGR));
-			} else {
-				unregister_shiftlayer_code(DE_LESS, _RIFT, MOD_BIT(KC_LSFT), MOD_BIT(DE_ALGR));
-			}
-			return false;
-			break;
-		case RF_TILD:
-			if (record->event.pressed) {
-				register_shiftlayer_code(DE_PLUS, MOD_BIT(KC_LSFT), MOD_BIT(DE_ALGR));
-			} else {
-				unregister_shiftlayer_code(DE_PLUS, _RIFT, MOD_BIT(KC_LSFT), MOD_BIT(DE_ALGR));
-			}
-			return false;
-			break;
-		case RF_LCBR:
-			if (record->event.pressed) {
-				register_shiftlayer_code(DE_7, MOD_BIT(KC_LSFT), MOD_BIT(DE_ALGR));
-			} else {
-				unregister_shiftlayer_code(DE_7, _RIFT, MOD_BIT(KC_LSFT), MOD_BIT(DE_ALGR));
-			}
-			return false;
-			break;
-		case RF_RCBR:
-			if (record->event.pressed) {
-				register_shiftlayer_code(DE_0, MOD_BIT(KC_LSFT), MOD_BIT(DE_ALGR));
-			} else {
-				unregister_shiftlayer_code(DE_0, _RIFT, MOD_BIT(KC_LSFT), MOD_BIT(DE_ALGR));
-			}
-			return false;
-			break;
-		case RF_LESS:
-			if (record->event.pressed) {
-				del_key(DE_LESS);
-				unregister_mods(MOD_BIT(KC_LSFT));
-				register_code(DE_LESS);
-			} else {
-				if ( ( ~get_mods() & MOD_BIT(KC_LSFT) ) && IS_LAYER_ON(_RIFT) ) {
-					unregister_code(DE_LESS);
-					register_mods(MOD_BIT(KC_LSFT));
-				}
-			}
-			return false;
-			break;
-		case RF_MORE:
-			if (record->event.pressed) {
-				if ( ~get_mods() & MOD_BIT(KC_LSFT) ) {
-					unregister_code(DE_LESS);
-					register_mods(MOD_BIT(KC_LSFT));
-				}
-				register_code(DE_LESS);
-			} else {
-				unregister_code(DE_LESS);
-			}
-			return false;
-			break;
-		case GB_PWR:
-			if (record->event.pressed) {
-				tap_timer = timer_read();
-			} else {
-				if (timer_elapsed(tap_timer) < 2000) {
-					layer_on(_WAKE);
-					register_code(KC_SLEP);
-					unregister_code(KC_SLEP);
-				} else {
-					register_code(KC_PWR);
-					unregister_code(KC_PWR);
-				}
-			}
-			return false;
-			break;
-		case GB_WAKE:
-			if (record->event.pressed) {
-				register_code(KC_WAKE);
-				unregister_code(KC_WAKE);
-				layer_off(_WAKE);
-			}
-			return false;
-			break;
-		case GB_RBIN:
-			if (record->event.pressed) {
-				tap_random_binary();
-			}
-			return false;
-			break;
-		case GB_RDEC:
-			if (record->event.pressed) {
-				tap_random_decimal();
-			}
-			return false;
-			break;
-		case GB_RHEX:
-			if (record->event.pressed) {
-				tap_random_hexadecimal();
-			}
-			return false;
-			break;
-		case GB_RB64:
-			if (record->event.pressed) {
-				tap_random_german_base64();
-			}
-			return false;
-			break;
-		case GB_BIBY:
-			if (record->event.pressed) {
-				tap_random_binary_byte();
-			}
-			return false;
-			break;
-		case GB_DEBY:
-			if (record->event.pressed) {
-				tap_random_decimal_byte();
-			}
-			return false;
-			break;
-		case GB_HEBY:
-			if (record->event.pressed) {
-				tap_random_hexadecimal_byte();
-			}
-			return false;
-			break;
-		case GB_COIN:
-			if (record->event.pressed) {
-				tap_random_coinflip();
-			}
-			return false;
-			break;
-		case GB_DICE:
-			if (record->event.pressed) {
-				tap_random_dice6();
-			}
-			return false;
-			break;
-		case GB_DEUS:
-			if (record->event.pressed) {
-				default_layer_xor( (1UL<<_MAIN) | (1UL<<_ORIG) );
-				eeconfig_update_default_layer( eeconfig_read_default_layer() ^ ( (1UL<<_MAIN) | (1UL<<_ORIG) ) );
-			}
-			return false;
-			break;
-	};
-	return true;
+    switch (keycode) {
+        case RIFT:
+            if (record->event.pressed) {
+                shiftlayer_on(_RIFT, MOD_BIT(KC_LSFT));
+            } else {
+                shiftlayer_off(_RIFT, MOD_BIT(KC_LSFT));
+            }
+            return false;
+            break;
+        case STEP:
+            if (record->event.pressed) {
+                layer_on(_STEP);
+            } else {
+                layer_off(_STEP);
+            }
+            return false;
+            break;
+        case MAUS:
+            if (record->event.pressed) {
+                if (IS_LAYER_ON(_MAUS)) {
+                    layer_off(_MAUS);
+                } else {
+                    tap_timer = timer_read();
+                    layer_on(_MAUS);
+                }
+            } else {
+                if ( IS_LAYER_ON(_MAUS) && timer_elapsed(tap_timer) > 180 ) {
+                    layer_off(_MAUS);
+                }
+            }
+            return false;
+            break;
+        case JUMP:
+            if (record->event.pressed) {
+                clear_mods();
+                layer_on(_JUMP);
+            } else {
+                layer_off(_JUMP);
+            }
+            return false;
+            break;
+        case MCTL:
+            if (record->event.pressed) {
+                modlayer_on(_MODS, MOD_BIT(KC_LCTL));
+            } else {
+                modlayer_off(_MODS, MOD_BIT(KC_LCTL), (MOD_BIT(KC_LCTL)|MOD_BIT(KC_LGUI)|MOD_BIT(KC_LALT)));
+            }
+            return false;
+            break;
+        case MGUI:
+            if (record->event.pressed) {
+                modlayer_on(_MODS, MOD_BIT(KC_LGUI));
+            } else {
+                modlayer_off(_MODS, MOD_BIT(KC_LGUI), (MOD_BIT(KC_LCTL)|MOD_BIT(KC_LGUI)|MOD_BIT(KC_LALT)));
+            }
+            return false;
+            break;
+        case MALT:
+            if (record->event.pressed) {
+                modlayer_on(_MODS, MOD_BIT(KC_LALT));
+            } else {
+                modlayer_off(_MODS, MOD_BIT(KC_LALT), (MOD_BIT(KC_LCTL)|MOD_BIT(KC_LGUI)|MOD_BIT(KC_LALT)));
+            }
+            return false;
+            break;
+        case RF_AT:
+            if (record->event.pressed) {
+                register_shiftlayer_code(DE_Q, MOD_BIT(KC_LSFT), MOD_BIT(DE_ALGR));
+            } else {
+                unregister_shiftlayer_code(DE_Q, _RIFT, MOD_BIT(KC_LSFT), MOD_BIT(DE_ALGR));
+            }
+            return false;
+            break;
+        case RF_HASH:
+            if (record->event.pressed) {
+                register_shiftlayer_code(DE_HASH, MOD_BIT(KC_LSFT), 0);
+            } else {
+                unregister_shiftlayer_code(DE_HASH, _RIFT, MOD_BIT(KC_LSFT), 0);
+            }
+            return false;
+            break;
+        case RF_CIRC:
+            if (record->event.pressed) {
+                register_shiftlayer_code(DE_CIRC, MOD_BIT(KC_LSFT), 0);
+            } else {
+                unregister_shiftlayer_code(DE_CIRC, _RIFT, MOD_BIT(KC_LSFT), 0);
+            }
+            return false;
+            break;
+        case RF_PLUS:
+            if (record->event.pressed) {
+                register_shiftlayer_code(DE_PLUS, MOD_BIT(KC_LSFT), 0);
+            } else {
+                unregister_shiftlayer_code(DE_PLUS, _RIFT, MOD_BIT(KC_LSFT), 0);
+            }
+            return false;
+            break;
+        case RF_PIPE:
+            if (record->event.pressed) {
+                register_shiftlayer_code(DE_LESS, MOD_BIT(KC_LSFT), MOD_BIT(DE_ALGR));
+            } else {
+                unregister_shiftlayer_code(DE_LESS, _RIFT, MOD_BIT(KC_LSFT), MOD_BIT(DE_ALGR));
+            }
+            return false;
+            break;
+        case RF_TILD:
+            if (record->event.pressed) {
+                register_shiftlayer_code(DE_PLUS, MOD_BIT(KC_LSFT), MOD_BIT(DE_ALGR));
+            } else {
+                unregister_shiftlayer_code(DE_PLUS, _RIFT, MOD_BIT(KC_LSFT), MOD_BIT(DE_ALGR));
+            }
+            return false;
+            break;
+        case RF_LCBR:
+            if (record->event.pressed) {
+                register_shiftlayer_code(DE_7, MOD_BIT(KC_LSFT), MOD_BIT(DE_ALGR));
+            } else {
+                unregister_shiftlayer_code(DE_7, _RIFT, MOD_BIT(KC_LSFT), MOD_BIT(DE_ALGR));
+            }
+            return false;
+            break;
+        case RF_RCBR:
+            if (record->event.pressed) {
+                register_shiftlayer_code(DE_0, MOD_BIT(KC_LSFT), MOD_BIT(DE_ALGR));
+            } else {
+                unregister_shiftlayer_code(DE_0, _RIFT, MOD_BIT(KC_LSFT), MOD_BIT(DE_ALGR));
+            }
+            return false;
+            break;
+        case RF_LESS:
+            if (record->event.pressed) {
+                del_key(DE_LESS);
+                unregister_mods(MOD_BIT(KC_LSFT));
+                register_code(DE_LESS);
+            } else {
+                if ( ( ~get_mods() & MOD_BIT(KC_LSFT) ) && IS_LAYER_ON(_RIFT) ) {
+                    unregister_code(DE_LESS);
+                    register_mods(MOD_BIT(KC_LSFT));
+                }
+            }
+            return false;
+            break;
+        case RF_MORE:
+            if (record->event.pressed) {
+                if ( ~get_mods() & MOD_BIT(KC_LSFT) ) {
+                    unregister_code(DE_LESS);
+                    register_mods(MOD_BIT(KC_LSFT));
+                }
+                register_code(DE_LESS);
+            } else {
+                unregister_code(DE_LESS);
+            }
+            return false;
+            break;
+        case GB_PWR:
+            if (record->event.pressed) {
+                tap_timer = timer_read();
+            } else {
+                if (timer_elapsed(tap_timer) < 2000) {
+                    layer_on(_WAKE);
+                    register_code(KC_SLEP);
+                    unregister_code(KC_SLEP);
+                } else {
+                    register_code(KC_PWR);
+                    unregister_code(KC_PWR);
+                }
+            }
+            return false;
+            break;
+        case GB_WAKE:
+            if (record->event.pressed) {
+                register_code(KC_WAKE);
+                unregister_code(KC_WAKE);
+                layer_off(_WAKE);
+            }
+            return false;
+            break;
+        case GB_RBIN:
+            if (record->event.pressed) {
+                tap_random_binary();
+            }
+            return false;
+            break;
+        case GB_RDEC:
+            if (record->event.pressed) {
+                tap_random_decimal();
+            }
+            return false;
+            break;
+        case GB_RHEX:
+            if (record->event.pressed) {
+                tap_random_hexadecimal();
+            }
+            return false;
+            break;
+        case GB_RB64:
+            if (record->event.pressed) {
+                tap_random_german_base64();
+            }
+            return false;
+            break;
+        case GB_BIBY:
+            if (record->event.pressed) {
+                tap_random_binary_byte();
+            }
+            return false;
+            break;
+        case GB_DEBY:
+            if (record->event.pressed) {
+                tap_random_decimal_byte();
+            }
+            return false;
+            break;
+        case GB_HEBY:
+            if (record->event.pressed) {
+                tap_random_hexadecimal_byte();
+            }
+            return false;
+            break;
+        case GB_COIN:
+            if (record->event.pressed) {
+                tap_random_coinflip();
+            }
+            return false;
+            break;
+        case GB_DICE:
+            if (record->event.pressed) {
+                tap_random_dice6();
+            }
+            return false;
+            break;
+        case GB_DEUS:
+            if (record->event.pressed) {
+                default_layer_xor( (1UL<<_MAIN) | (1UL<<_ORIG) );
+                eeconfig_update_default_layer( eeconfig_read_default_layer() ^ ( (1UL<<_MAIN) | (1UL<<_ORIG) ) );
+            }
+            return false;
+            break;
+    };
+    return true;
 };
 
