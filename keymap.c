@@ -209,7 +209,7 @@ const uint16_t keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |---------------------------------------------------------------|
  * |     |   |   |  €|   |   |   |  ü|   |  ö|  §|   |   |     |Ins|
  * |---------------------------------------------------------------|
- * | ^^^^ |  ä|  ß|   |   |   |   |   |   |   |   |   |        |Hom|
+ * | ^^^^ |  ä|  ß|   |   |   |   |   |   |   |   |  ´|        |Hom|
  * |---------------------------------------------------------------|
  * |        |  ¹|  ²|  ³|   |   |   |  µ|<<<|>>>|Stp|      |Vu+|End|
  * |---------------------------------------------------------------|
@@ -221,7 +221,7 @@ const uint16_t keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   XXXXXXX,     XXXXXXX, XXXXXXX, DE_EURO, XXXXXXX, XXXXXXX, XXXXXXX, DE_UE,   XXXXXXX, DE_OE,   DE_PARA, XXXXXXX, XXXXXXX, XXXXXXX,      KC_INS,
 
-  _______,         DE_AE,   DE_SS,   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,  KC_HOME,
+  _______,         DE_AE,   DE_SS,   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, DE_ACUT, XXXXXXX, XXXXXXX,  KC_HOME,
 
   _______,    XXXXXXX, DE_SQ1,  DE_SQ2,  DE_SQ3,  XXXXXXX, XXXXXXX, XXXXXXX, DE_MU,   KC_MRWD, KC_MFFD, KC_MSTP, XXXXXXX,       KC_VOLU, KC_END,
 
